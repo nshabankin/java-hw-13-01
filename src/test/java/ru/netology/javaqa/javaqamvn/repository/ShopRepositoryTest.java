@@ -2,6 +2,7 @@ package ru.netology.javaqa.javaqamvn.repository;
 
 import org.junit.jupiter.api.Test;
 import ru.netology.javaqa.javaqamvn.domain.Product;
+import ru.netology.javaqa.javaqamvn.exceptions.AlreadyExistsException;
 import ru.netology.javaqa.javaqamvn.exceptions.NotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,6 +53,37 @@ public class ShopRepositoryTest {
         String actual = exception.getMessage();
 
         // проверка на соответствие
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldAddProduct() {
+
+        // тестовые действия
+        repo.add(product1);
+
+        // ожидаемый результат
+        Product[] expected = {product1};
+
+        // фактический результат
+        Product[] actual = repo.findAll();
+
+        // проверка на соответствие
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldThrowAlreadyExistsExceptionWhenAddingProductWithSameId() {
+
+        // тестовые действия
+        repo.add(product1);
+
+        Exception exception = assertThrows(AlreadyExistsException.class, () ->
+                repo.add(product1)
+        );
+
+        String expected = "Product with id: 1 already exists";
+        String actual = exception.getMessage();
         assertEquals(expected, actual);
     }
 }

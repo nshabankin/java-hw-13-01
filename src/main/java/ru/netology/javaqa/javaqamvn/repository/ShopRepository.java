@@ -1,6 +1,7 @@
 package ru.netology.javaqa.javaqamvn.repository;
 
 import ru.netology.javaqa.javaqamvn.domain.Product;
+import ru.netology.javaqa.javaqamvn.exceptions.AlreadyExistsException;
 import ru.netology.javaqa.javaqamvn.exceptions.NotFoundException;
 
 public class ShopRepository {
@@ -24,11 +25,16 @@ public class ShopRepository {
     }
 
     /**
-     * Метод добавления товара в репозиторий
+     * Метод добавления товара в репозиторий с проверкой, если id уже существует
      *
      * @param product — добавляемый товар
      */
     public void add(Product product) {
+        if (findById(product.getId()) != null) {
+            throw new AlreadyExistsException(
+                    "Product with id: " + product.getId() + " already exists"
+            );
+        }
         products = addToArray(products, product);
     }
 
